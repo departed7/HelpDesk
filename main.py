@@ -164,12 +164,13 @@ class App(ctk.CTk):
 
     def perf_test(self):
         stats = self.ticket_service.get_system_stats()
+        file_hash = self.auth_service.check_file_integrity("main.py")
         mon_win = ctk.CTkToplevel(self)
-        mon_win.title("Системный мониторинг (ПК 4.2)")
-        mon_win.geometry("450x400")
+        mon_win.title("Системный мониторинг (ПК 4.2 / ПК 4.4)")
+        mon_win.geometry("460x430")
         mon_win.attributes("-topmost", True)
         
-        ctk.CTkLabel(mon_win, text="ПАРАМЕТРЫ СИСТЕМЫ", font=("Segoe UI", 18, "bold")).pack(pady=20)
+        ctk.CTkLabel(mon_win, text="ПАРАМЕТРЫ СИСТЕМЫ", font=("Segoe UI", 18, "bold")).pack(pady=15)
         f = ctk.CTkFrame(mon_win, corner_radius=10)
         f.pack(padx=20, pady=10, fill="both", expand=True)
         
@@ -179,13 +180,14 @@ class App(ctk.CTk):
         if diff < 0.0001:
             diff = random.uniform(0.00091, 0.00158)
         
-        ctk.CTkLabel(f, text=f"Объем базы данных: {stats['db_size']}", font=("Segoe UI", 13)).pack(pady=10)
-        ctk.CTkLabel(f, text=f"Всего записей: {stats['total_tickets']}", font=("Segoe UI", 13)).pack(pady=10)
-        ctk.CTkLabel(f, text=f"Ошибки в логах: {stats['errors']}", font=("Segoe UI", 13)).pack(pady=10)
-        ctk.CTkLabel(f, text=f"Скорость отклика БД: {diff:.6f} сек.", font=("Segoe UI", 13), text_color="#28a745").pack(pady=10)
-        ctk.CTkLabel(f, text=f"Статус ПО: {stats['status']}", font=("Segoe UI", 13, "bold")).pack(pady=10)
+        ctk.CTkLabel(f, text=f"Объем базы данных: {stats['db_size']}", font=("Segoe UI", 13)).pack(pady=8)
+        ctk.CTkLabel(f, text=f"Всего записей: {stats['total_tickets']}", font=("Segoe UI", 13)).pack(pady=8)
+        ctk.CTkLabel(f, text=f"Журнал безопасности: {stats['errors']}", font=("Segoe UI", 13)).pack(pady=8)
+        ctk.CTkLabel(f, text=f"Целостность SHA-256: {file_hash}", font=("Segoe UI", 13), text_color="#17a2b8").pack(pady=8)
+        ctk.CTkLabel(f, text=f"Скорость отклика БД: {diff:.6f} сек.", font=("Segoe UI", 13), text_color="#28a745").pack(pady=8)
+        ctk.CTkLabel(f, text=f"Статус ПО: {stats['status']}", font=("Segoe UI", 13, "bold")).pack(pady=8)
         
-        ctk.CTkButton(mon_win, text="ЗАКРЫТЬ", command=mon_win.destroy).pack(pady=20)
+        ctk.CTkButton(mon_win, text="ЗАКРЫТЬ", command=mon_win.destroy).pack(pady=15)
 
 if __name__ == "__main__":
     app = App()

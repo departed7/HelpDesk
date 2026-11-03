@@ -1,4 +1,5 @@
 import sqlite3
+import hashlib
 import settings
 from logger import SystemLogger
 
@@ -28,13 +29,14 @@ class DBManager:
                 created_at TEXT
             )
         ''')
+        admin_hash = hashlib.sha256(settings.ADMIN_PASS.encode("utf-8")).hexdigest()
         self.cursor.execute("SELECT COUNT(*) FROM users")
         if self.cursor.fetchone()[0] == 0:
             self.cursor.execute("INSERT INTO users (login, password, role) VALUES (?, ?, ?)", 
-                               (settings.ADMIN_LOGIN, settings.ADMIN_PASS, 'admin'))
+                               (settings.ADMIN_LOGIN, admin_hash, 'admin'))
         else:
             self.cursor.execute("UPDATE users SET password = ? WHERE login = ?", 
-                               (settings.ADMIN_PASS, settings.ADMIN_LOGIN))
+                               (admin_hash, settings.ADMIN_LOGIN))
         self.conn.commit()
 
     def query(self, sql, params=(), commit=False):
