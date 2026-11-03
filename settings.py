@@ -1,0 +1,6 @@
+APP_TITLE = "Система HelpDesk v.1.2"
+GEOMETRY = "1150x750"
+DB_NAME = "service_desk.db"
+LOG_FILE = "system.log"
+ADMIN_LOGIN = "admin"
+ADMIN_PASS = "Admin123!"
